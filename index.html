@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Convergence Criteria: Knowing When to Stop</title>
+    <title>Challenges and Considerations</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -33,13 +33,25 @@
         ul {
             padding-left: 20px;
         }
-        .image-placeholder, .interactive-placeholder, .continue-button, .vocab-section, .why-it-matters, .test-your-knowledge, .faq-section, .stop-and-think {
-            text-align: left;
+        .image-placeholder, .visual-aid-placeholder, .interactive-placeholder {
+            text-align: center;
+            margin-top: 20px;
         }
-        .image-placeholder img, .interactive-placeholder img {
+        .image-placeholder img, .visual-aid-placeholder img, .interactive-placeholder img {
             max-width: 100%;
             height: auto;
             border-radius: 5px;
+        }
+        .interactive-placeholder {
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            background-color: #f5f5f5;
+        }
+        .interactive-placeholder output {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
         }
         .vocab-section, .why-it-matters, .test-your-knowledge, .faq-section, .stop-and-think {
             padding: 20px;
@@ -148,148 +160,201 @@
             margin-top: 10px;
             margin-bottom: 8px;
         }
+        .visual-aid-placeholder-labels {
+            margin-top: 10px;
+        }
+        .visual-aid-placeholder-labels ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .visual-aid-placeholder-labels li {
+            margin-bottom: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
     </style>
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
     <section id="section1">
+        <h1>Navigating the Complexities</h1>
+        <p>Well done, intrepid learners! You've conquered the basics of Gradient Descent and witnessed its power in linear regression. But as with any powerful tool, there are nuances and challenges to be aware of. In this lesson, we'll explore some of the real-world considerations that can arise when using Gradient Descent. Get ready to navigate the complexities!</p>
         <div class="image-placeholder">
-            <img src="/placeholder.svg?height=300&width=600" alt="An illustration of a finish line banner stretched across a path leading down a hill. A hiker (representing the gradient descent algorithm) is approaching the finish line.">
+            <img src="/placeholder.svg?height=300&width=600" alt="A hiker encountering a fork in the road on a mountain path, with signs pointing to different challenges like 'Steep Slope,' 'Rocky Terrain,' and 'Foggy Conditions,' symbolizing the various challenges faced in gradient descent.">
         </div>
-        <h1>Convergence Criteria: Knowing When to Stop</h1>
-        <p>We've learned how gradient descent iteratively updates parameters to minimize the cost function, like a hiker descending a hill. But how do we know when our hiker has reached the bottom? When do we stop the iterations? That's where <strong>convergence criteria</strong> come in! In this lesson, we'll learn how to determine when our gradient descent algorithm has found a good solution.</p>
         <div class="continue-button" onclick="showNextSection(2)">Continue</div>
     </section>
 
     <section id="section2">
-        <p>In the context of gradient descent, <strong>convergence</strong> means that the algorithm has reached a point where further iterations are not leading to significant improvements in the cost function or the parameter values. In other words, the algorithm has settled into a minimum (hopefully the global minimum, but possibly a local one).</p>
-        <p>Think of our hiker again. Convergence is like reaching a flat area at the bottom of the hill where taking further steps doesn't significantly change the altitude. The hiker might still be moving around a bit, but they're essentially at the bottom.</p>
-        <div class="image-placeholder">
-            <img src="/placeholder.svg?height=300&width=600" alt="An animation of a ball rolling down a curved surface towards a valley. As the ball approaches the bottom, its movements become smaller and smaller until it eventually settles in the valley.">
+        <h2>The Importance of Learning Rate</h2>
+        <p>We've touched upon the learning rate (\( \alpha \)) before, but it's so crucial that it deserves a deeper dive. The learning rate determines the step size in each iteration of Gradient Descent. Choosing the right learning rate is a delicate balancing act.</p>
+        <div class="visual-aid-placeholder">
+            <p><b>Learning Rate Impact</b></p>
+            <img src="/placeholder.svg?height=300&width=600" alt="An animation showing three different hikers descending the same mountain. Each hiker has a different stride length (learning rate).">
+            <p>Visualizing the effect of different learning rates on the path taken by Gradient Descent.</p>
         </div>
+        <p>As the animation illustrates, a learning rate that's too small leads to slow convergence, while a learning rate that's too large can cause oscillations or even divergence, preventing us from finding the minimum.</p>
         <div class="continue-button" onclick="showNextSection(3)">Continue</div>
     </section>
 
     <section id="section3">
-        <p>We need convergence criteria to:</p>
+        <h2>Reaching a stopping criteria</h2>
+        <p>In the iterative process of gradient descent, determining the right moment to halt the algorithm is essential for ensuring both the efficiency and effectiveness of the optimization. There are mainly two conditions to consider when deciding to stop.</p>
+        <p><b>Algorithm:</b></p>
+        <ol>
+            <li>Choose a learning rate \( \alpha > 0 \), a maximum number of iterations \( N \), and a convergence threshold \( \epsilon > 0 \).</li>
+            <li>Choose a random initial parameter/vector \( \theta \).</li>
+            <li>Calculate gradient \( \nabla_{\theta}C(\theta) \).</li>
+            <li>Update parameter(s) with:
+                <p>\( \theta := \theta - \alpha * \nabla_{\theta}C(\theta) \)</p>
+            </li>
+            <li>Repeat steps 3 and 4 until at least one termination condition is fulfilled:
+                <ul>
+                    <li>Gradient (change) smaller than threshold \( ||\nabla C(\theta)||_2 < \epsilon \) (convergence)</li>
+                    <li>Maximum number of iterations \( N \) has been reached (time limit)</li>
+                </ul>
+            </li>
+        </ol>
+        <p><b>Explanation:</b></p>
         <ul>
-            <li><strong>Avoid unnecessary computations:</strong> Once the algorithm has converged, further iterations are unlikely to yield significant improvements. Continuing to run the algorithm would waste computational resources.</li>
-            <li><strong>Determine when a good solution has been found:</strong> Convergence criteria provide a way to objectively assess whether the algorithm has reached a satisfactory solution.</li>
-            <li><strong>Prevent infinite loops:</strong> In some cases, gradient descent might not converge perfectly. Convergence criteria help us stop the algorithm even if it's just oscillating around the minimum.</li>
+            <li>
+                <p><b>Setting Initial Parameters</b></p>
+                <p>Before the algorithm begins, several initial parameters must be determined. The learning rate (\( \alpha \)) dictates the size of the steps taken towards the minimum. The maximum number of iterations (\( N \)) sets a limit on how long the algorithm will run, preventing it from continuing indefinitely. The convergence threshold (\( \epsilon \)) defines the minimum amount of change in the gradient's magnitude that is considered significant. Together, these parameters ensure the algorithm runs efficiently and stops when appropriate.</p>
+            </li>
+            <li>
+                <p><b>Initialization</b></p>
+                <p>The algorithm starts with a random initialization of the parameter vector \( \theta \). This randomness helps in exploring different parts of the cost function landscape, potentially avoiding local minima and finding a path to the global minimum.</p>
+            </li>
+            <li>
+                <p><b>Gradient Calculation and Parameter Update</b></p>
+                <p>The core of the algorithm involves calculating the gradient of the cost function \( \nabla_{\theta}C(\theta) \), which points in the direction of the steepest increase of the cost function. The parameters are then updated by moving in the opposite direction of the gradient, scaled by the learning rate \( \alpha \). This step is crucial for iteratively reducing the cost function.</p>
+            </li>
+            <li>
+                <p><b>Termination Conditions</b></p>
+                <p>The algorithm iterates until one of two conditions is met:</p>
+                <ul>
+                    <li><b>Convergence:</b> The magnitude of the gradient vector becomes smaller than the convergence threshold \( \epsilon \) (||∇C(θ)||<sub>2</sub> < ε). This indicates that the algorithm has reached a point where further iterations do not significantly reduce the cost function, suggesting it has found a minimum.</li>
+                    <li><b>Maximum Iterations:</b> The number of iterations reaches the predefined limit N. This condition prevents the algorithm from running indefinitely, especially if convergence is slow or not guaranteed.</li>
+                </ul>
+            </li>
         </ul>
-        <div class="why-it-matters">
-            <h3>Why It Matters</h3>
-            <p>Convergence criteria are essential for practical implementations of gradient descent. They ensure that the algorithm terminates in a reasonable amount of time and provides a meaningful solution.</p>
-        </div>
+        <p><b>Summary:</b></p>
+        <p>The gradient descent algorithm efficiently optimizes a cost function by iteratively adjusting parameters in the direction opposite to the gradient. It stops when either it converges to a minimum, indicated by a very small gradient, or it reaches a predefined maximum number of iterations. Proper initialization and setting of termination conditions are essential for the algorithm's success.</p>
         <div class="continue-button" onclick="showNextSection(4)">Continue</div>
     </section>
 
     <section id="section4">
-        <p>There are two main types of convergence criteria commonly used in gradient descent:</p>
-        <h3>1. Gradient-Based Criterion (Change is Small):</h3>
-        <p>This criterion checks if the magnitude (or norm) of the gradient vector has become sufficiently small. A small gradient indicates that the cost function is relatively flat around the current parameter values, suggesting that we're close to a minimum.</p>
-        <p>\[ ||∇C(θ)|| < ε \]</p>
-        <p>where $$||∇C(θ)||$$ represents the magnitude of the gradient vector, and ε (epsilon) is a small, predefined threshold (e.g., 0.001).</p>
-        <h3>2. Maximum Iterations Reached:</h3>
-        <p>This criterion simply stops the algorithm after a fixed number of iterations. It's a safeguard to prevent the algorithm from running indefinitely, especially if it's having trouble converging.</p>
-        <div class="image-placeholder">
-            <img src="/placeholder.svg?height=300&width=600" alt="Two graphs. Graph 1: 'Convergence Based on Gradient.' X-axis: Iteration, Y-axis: ||∇C(θ)||. A horizontal line represents the threshold ε. The curve starts high and decreases, crossing the threshold line. Text below: 'Algorithm stops when ||∇C(θ)|| < ε.' Graph 2: 'Convergence Based on Iterations.' X-axis: Iteration, Y-axis: Cost Function Value. A vertical line represents the maximum number of iterations. The curve decreases and flattens. Text below: 'Algorithm stops after a fixed number of iterations.'">
+        <h2>Local Minima vs. Global Minimum</h2>
+        <p>Now, let's talk about a challenge that can sometimes trip up Gradient Descent: local minima. Imagine our cost function landscape not as a simple bowl but as a vast terrain with multiple hills and valleys.</p>
+        <div class="visual-aid-placeholder">
+            <p><b>Local vs. Global Minima</b></p>
+            <img src="/placeholder.svg?height=300&width=600" alt="A 3D plot showing a complex landscape with multiple valleys (local minima) and one deep valley (global minimum). Several hikers start from different points on the landscape. Some hikers reach the global minimum, while others get stuck in local minima. The paths of the hikers are traced on the landscape.">
+            <p>Illustrating the challenge of local minima: Gradient Descent can sometimes lead to a local minimum instead of the global minimum, depending on the starting point.</p>
         </div>
+        <p>Gradient Descent always moves downhill. If it starts near a shallow valley (a local minimum), it might get stuck there, even if there's a deeper valley (the global minimum) further away. This is because the algorithm only considers the local slope and doesn't have a global view of the landscape.</p>
         <div class="continue-button" onclick="showNextSection(5)">Continue</div>
     </section>
 
     <section id="section5">
-        <p>For the gradient-based criterion, choosing an appropriate threshold (ε) is important.</p>
-        <ul>
-            <li><strong>If ε is too large:</strong> The algorithm might stop prematurely, before reaching a good solution.</li>
-            <li><strong>If ε is too small:</strong> The algorithm might run for too long, wasting computational resources without significant improvement.</li>
-        </ul>
-        <div class="interactive-placeholder">
-            <img src="/placeholder.svg?height=300&width=600" alt="A graph of a cost function with a relatively steep slope at the point where the algorithm stops. The user can adjust a slider to change the value of ε. As ε increases, a horizontal line representing the threshold moves up, and the point where the algorithm stops (indicated by a marker) shifts to a higher point on the cost function curve.">
+        <h2>The Usefulness of Local Minima</h2>
+        <p>Does this mean Gradient Descent is flawed? Not necessarily. In many real-world problems, especially in high-dimensional spaces like those encountered in deep learning, local minima often still provide good solutions. They might not be the absolute best, but they can still lead to models that perform well.</p>
+        <div class="why-it-matters">
+            <h3>Why It Matters</h3>
+            <p>In practice, finding a local minimum that provides good model performance is often sufficient. The pursuit of the global minimum can be computationally expensive and might not always yield significantly better results.</p>
         </div>
         <div class="continue-button" onclick="showNextSection(6)">Continue</div>
     </section>
 
     <section id="section6">
-        <p>The maximum number of iterations depends on the specific problem, the complexity of the cost function, and the desired accuracy. It's often determined through experimentation. A common practice is to start with a large number (e.g., 1000, 10000, or more) and monitor the convergence behavior. If the algorithm consistently converges well before reaching the maximum, you can reduce the number.</p>
+        <h2>Complex Cost Functions</h2>
+        <p>In our examples so far, we've mainly looked at relatively simple cost functions. But in reality, cost functions can be incredibly complex, with numerous hills, valleys, and flat regions. This complexity can make optimization challenging.</p>
+        <div class="visual-aid-placeholder">
+            <p><b>Complex Cost Function Landscape</b></p>
+            <img src="/placeholder.svg?height=300&width=600" alt="A 3D plot showing a highly complex cost function landscape with numerous hills, valleys, ridges, and plateaus. The landscape is colored to indicate different cost levels, with darker colors representing lower costs.">
+            <p>A visualization of a complex cost function landscape, highlighting the difficulties of finding the global minimum in high-dimensional, non-convex optimization problems.</p>
+        </div>
+        <p>Navigating such a complex landscape requires careful consideration of the learning rate, initialization, and even the choice of optimization algorithm. There are more advanced variations of Gradient Descent that are designed to handle these complexities, which we'll touch upon in later lessons.</p>
         <div class="continue-button" onclick="showNextSection(7)">Continue</div>
     </section>
 
     <section id="section7">
-        <p>In practice, it's often a good idea to use both the gradient-based criterion and the maximum iterations criterion together. This provides a robust stopping mechanism that balances the desire for a good solution with the need to avoid excessive computations.</p>
-        <p>For example, you might set ε = 0.001 and the maximum number of iterations to 5000. The algorithm will stop when either the gradient's magnitude falls below 0.001 or the algorithm has run for 5000 iterations, whichever comes first.</p>
+        <h2>Stop and Think</h2>
+        <p>Let's pause and reflect on these challenges:</p>
+        <div class="stop-and-think">
+            <h3>Stop and Think</h3>
+            <ol>
+                <li>
+                    <p>How might the initialization of parameters (the starting point of our hiker) affect the outcome of Gradient Descent when dealing with local minima?</p>
+                    <button class="reveal-button" onclick="revealAnswer('stop-and-think-7-1')">Reveal Hint</button>
+                    <p id="stop-and-think-7-1" style="display: none;">Consider different starting positions on a landscape with multiple valleys.</p>
+                </li>
+                <li>
+                    <p>Can you think of real-world scenarios where settling for a local minimum might be acceptable or even desirable?</p>
+                    <button class="reveal-button" onclick="revealAnswer('stop-and-think-7-2')">Reveal Hint</button>
+                    <p id="stop-and-think-7-2" style="display: none;">Think about situations where finding a 'good enough' solution quickly might be more important than finding the absolute best solution.</p>
+                </li>
+            </ol>
+        </div>
         <div class="continue-button" onclick="showNextSection(8)">Continue</div>
     </section>
 
     <section id="section8">
+        <h2>Build Your Vocabulary</h2>
+        <p>Let's solidify some key terms:</p>
         <div class="vocab-section">
-            <h3>Build Your Vocab</h3>
-            <h4 class="vocab-term">Convergence</h4>
-            <p>In the context of gradient descent, convergence means that the algorithm has reached a stable solution where further iterations do not significantly change the parameters or the cost function value.</p>
-            <h4 class="vocab-term">Threshold (ε)</h4>
-            <p>A small, predefined value used in the gradient-based convergence criterion. It determines when the gradient is considered small enough to stop the algorithm.</p>
-            <h4 class="vocab-term">Magnitude (or Norm) of the Gradient</h4>
-            <p>A measure of the overall size or length of the gradient vector. It indicates the steepness of the cost function at the current parameter values. A smaller magnitude suggests a flatter region closer to a minimum.</p>
+            <ul>
+                <li>
+                    <p><b>Local Minimum</b></p>
+                    <p>A point in the cost function landscape where the cost is lower than all neighboring points, but not necessarily the lowest cost overall. It's a 'valley' that's not the deepest one.</p>
+                </li>
+                <li>
+                    <p><b>Global Minimum</b></p>
+                    <p>The point in the cost function landscape where the cost is the lowest overall. It's the deepest 'valley' in the entire landscape.</p>
+                </li>
+                <li>
+                    <p><b>Convergence</b></p>
+                    <p>The point at which an iterative algorithm, like Gradient Descent, has reached a stable solution and further iterations do not significantly change the result. It's when our hiker has essentially reached the bottom of a valley.</p>
+                </li>
+            </ul>
         </div>
         <div class="continue-button" onclick="showNextSection(9)">Continue</div>
     </section>
 
     <section id="section9">
-        <div class="stop-and-think">
-            <h3>Stop and Think</h3>
-            <h4>What are the trade-offs between using a very small threshold (ε) for convergence and using a larger threshold? How might this affect the accuracy of the solution and the computational cost?</h4>
-            <button class="reveal-button" onclick="revealAnswer('stop-and-think-1')">Reveal</button>
-            <p id="stop-and-think-1" style="display: none;">A very small threshold (ε) can lead to a more accurate solution as the algorithm will continue until it reaches a point where the gradient is extremely small. However, this comes at the cost of increased computational time and resources. A larger threshold might result in a less accurate solution but will converge faster. The choice depends on the specific problem and the balance between accuracy and computational efficiency needed for your application.</p>
+        <h2>Test Your Knowledge</h2>
+        <p>Time for a quick quiz to check your understanding!</p>
+        <div class="test-your-knowledge">
+            <h4>Which of the following statements is TRUE about local minima in Gradient Descent?</h4>
+            <p><input type="radio" name="q1" value="a"> Local minima are always undesirable and indicate a failure of the algorithm.</p>
+            <p><input type="radio" name="q1" value="b"> Local minima can sometimes provide satisfactory solutions, even if they are not the global minimum.</p>
+            <p><input type="radio" name="q1" value="c"> Gradient Descent always finds the global minimum, avoiding all local minima.</p>
+            <p><input type="radio" name="q1" value="d"> Local minima only occur in poorly designed cost functions.</p>
+            <button class="check-button" onclick="checkAnswer('q1', 'b')">Check Answer</button>
+            <p id="q1-feedback" style="display: none;"></p>
         </div>
         <div class="continue-button" onclick="showNextSection(10)">Continue</div>
     </section>
 
     <section id="section10">
-        <div class="faq-section">
-            <h3>Frequently Asked Questions</h3>
-            <h4>Can gradient descent get stuck even if it satisfies the convergence criteria?</h4>
-            <p>Yes, gradient descent can get stuck in a local minimum, especially if the cost function is non-convex. In such cases, the convergence criteria might be met even though the algorithm hasn't found the global minimum.</p>
-            <h4>How do I know if my algorithm has converged to a good solution?</h4>
-            <p>Besides checking the convergence criteria, it's also helpful to monitor the cost function value during training. If the cost function has decreased significantly and reached a stable value, it's a good indication that the algorithm has converged to a reasonable solution. Additionally, you can evaluate the model's performance on a separate validation dataset to assess its generalization ability.</p>
-        </div>
-        <div class="continue-button" onclick="showNextSection(11)">Continue</div>
-    </section>
-
-    <section id="section11">
-        <h2>Test Your Knowledge</h2>
-        <div class="test-your-knowledge">
-            <h3>Test Your Knowledge</h3>
-            <h4>What does it mean when the magnitude of the gradient is close to zero?</h4>
-            <div id="question1">
-                <input type="radio" name="q1" value="0"> The algorithm is far from the minimum.<br>
-                <input type="radio" name="q1" value="1"> The algorithm is close to a minimum.<br>
-                <input type="radio" name="q1" value="2"> The learning rate is too large.<br>
-                <button class="check-button" onclick="checkAnswer('q1', 1)">Check Answer</button>
-            </div>
-            <p id="q1-feedback" style="display: none;"></p>
-
-            <h4>Why might you set a maximum number of iterations for gradient descent?</h4>
-            <div id="question2">
-                <input type="radio" name="q2" value="0"> To ensure the algorithm always finds the global minimum.<br>
-                <input type="radio" name="q2" value="1"> To prevent the algorithm from running indefinitely.<br>
-                <input type="radio" name="q2" value="2"> To increase the learning rate.<br>
-                <button class="check-button" onclick="checkAnswer('q2', 1)">Check Answer</button>
-            </div>
-            <p id="q2-feedback" style="display: none;"></p>
-        </div>
-        <div class="continue-button" onclick="showNextSection(12)">Continue</div>
-    </section>
-
-    <section id="section12">
-        <p>Well done! You now understand how to use convergence criteria to determine when to stop the gradient descent algorithm. In our next exciting lesson, we'll put all the pieces together and apply gradient descent to train a real machine learning model: linear regression. Get ready to witness the power of optimization in action!</p>
+        <h2>Wrapping Up Lesson 4</h2>
+        <p>Congratulations, you've now grappled with the challenges and considerations of Gradient Descent! You understand the critical role of the learning rate, the complexities of local minima, and the nature of real-world cost functions. This knowledge will be invaluable as you apply Gradient Descent to more complex problems. In the next lesson, we'll introduce a powerful variant of Gradient Descent called Stochastic Gradient Descent. Get ready to explore a faster and more dynamic approach to optimization!</p>
         <div class="image-placeholder">
-            <img src="/placeholder.svg?height=300&width=600" alt="A cartoon image of a hiker (representing a data scientist) standing at the finish line, looking back at the path they've taken down the hill. A signpost points forward, labeled 'Next: Gradient Descent for Linear Regression'.">
+            <img src="/placeholder.svg?height=300&width=600" alt="A hiker successfully navigating a challenging mountain path, having overcome obstacles and learned from the terrain, symbolizing the mastery gained from understanding the challenges of gradient descent.">
         </div>
     </section>
 
     <script>
-        // Show the first section initially
         document.getElementById("section1").style.display = "block";
         document.getElementById("section1").style.opacity = "1";
 
@@ -319,22 +384,29 @@
 
         function checkAnswer(questionId, correctAnswer) {
             const selectedAnswer = document.querySelector(`input[name="${questionId}"]:checked`);
-            const feedback = document.getElementById(`${questionId}-feedback`);
+            const feedbackElement = document.getElementById(`${questionId}-feedback`);
             
             if (selectedAnswer) {
-                if (parseInt(selectedAnswer.value) === correctAnswer) {
-                    feedback.textContent = "Correct! Well done!";
-                    feedback.style.color = "green";
+                if (selectedAnswer.value === correctAnswer) {
+                    feedbackElement.textContent = "Correct! In many real-world scenarios, especially in deep learning, local minima can still lead to models that perform well, and finding a good local minimum is often sufficient.";
+                    feedbackElement.style.color = "green";
                 } else {
-                    feedback.textContent = "Incorrect. Try again!";
-                    feedback.style.color = "red";
+                    if (selectedAnswer.value === 'a') {
+                        feedbackElement.textContent = "Incorrect. While local minima might not represent the absolute best solution, they can often still lead to good model performance, especially in complex, high-dimensional problems.";
+                    } else if (selectedAnswer.value === 'c') {
+                        feedbackElement.textContent = "Incorrect. Gradient Descent is not guaranteed to find the global minimum. It can get stuck in local minima, depending on factors like initialization and the complexity of the cost function.";
+                    } else {
+                        feedbackElement.textContent = "Incorrect. Local minima are a common characteristic of many cost functions, especially in complex models like neural networks, regardless of how well-designed they are.";
+                    }
+                    feedbackElement.style.color = "red";
                 }
-                feedback.style.display = "block";
             } else {
-                alert("Please select an answer before checking.");
+                feedbackElement.textContent = "Please select an answer.";
+                feedbackElement.style.color = "blue";
             }
+            
+            feedbackElement.style.display = "block";
         }
     </script>
 </body>
 </html>
-
