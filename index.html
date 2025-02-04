@@ -154,11 +154,12 @@
 </head>
 <body>
     <section id="section1">
-        <h1>Challenges and Considerations: The Real-World Landscape of Gradient Descent</h1>
-        <div class="image-placeholder">
+<div class="image-placeholder">
             <img src="/placeholder.svg?height=300&width=600" alt="A hiker encountering a fork in the road on a mountain path, with signs pointing to different challenges like 'Steep Slope,' 'Rocky Terrain,' and 'Foggy Conditions,' symbolizing the various challenges faced in gradient descent.">
         </div>
-        <p>Well done, intrepid learners! You've conquered the basics of Gradient Descent and witnessed its power in linear regression. But as with any powerful tool, there are nuances and challenges to be aware of. In this lesson, we'll explore some of the real-world considerations that can arise when using Gradient Descent. Get ready to navigate the complexities!</p>
+        <h1>Challenges and Considerations: The Real-World Landscape of Gradient Descent</h1>
+        
+        <p>You've conquered the basics of Gradient Descent and witnessed its power in linear regression. But as with any powerful tool, there are nuances and challenges to be aware of. In this lesson, we'll explore some of the real-world considerations that can arise when using Gradient Descent. Get ready to navigate the complexities!</p>
         <div class="continue-button" onclick="showNextSection(2)">Continue</div>
     </section>
 
@@ -210,7 +211,7 @@
 
     <section id="section4">
         <h2>Local Minima vs. Global Minimum</h2>
-        <p>Now, let's talk about a challenge that can sometimes trip up Gradient Descent: local minima. Imagine our cost function landscape not as a simple bowl but as a vast terrain with multiple hills and valleys.</p>
+        <p>Now, let's talk about a challenge that can sometimes trip up Gradient Descent: <strong>local minima</strong>. Imagine our cost function landscape not as a simple bowl but as a vast terrain with multiple hills and valleys.</p>
         <div class="interactive-placeholder">
             <img src="/placeholder.svg?height=300&width=600" alt="A 3D plot showing a complex landscape with multiple valleys (local minima) and one deep valley (global minimum). Several hikers start from different points on the landscape. Some hikers reach the global minimum, while others get stuck in local minima. The paths of the hikers are traced on the landscape.">
             <p><em>Illustrating the challenge of local minima: Gradient Descent can sometimes lead to a local minimum instead of the global minimum, depending on the starting point.</em></p>
@@ -241,20 +242,19 @@
     </section>
 
     <section id="section7">
-        <h2>Stop and Think</h2>
         <p>Let's pause and reflect on these challenges:</p>
         <div class="stop-and-think">
             <h3>Stop and Think</h3>
             <h4>How might the initialization of parameters (the starting point of our hiker) affect the outcome of Gradient Descent when dealing with local minima?</h4>
             <p><em>Hint: Consider different starting positions on a landscape with multiple valleys.</em></p>
-            <button class="reveal-button" onclick="revealAnswer('stop-and-think-1')">Reveal Answer</button>
+            <button class="reveal-button" onclick="revealAnswer('stop-and-think-1')">Reveal</button>
             <p id="stop-and-think-1" style="display: none;">The initialization of parameters can significantly affect the outcome of Gradient Descent. If the starting point is close to a local minimum, the algorithm may converge to that local minimum instead of finding the global minimum. Different initializations can lead to different final solutions, especially in complex landscapes with multiple local minima.</p>
         </div>
         <div class="stop-and-think">
             <h3>Stop and Think</h3>
             <h4>Can you think of real-world scenarios where settling for a local minimum might be acceptable or even desirable?</h4>
             <p><em>Hint: Think about situations where finding a 'good enough' solution quickly might be more important than finding the absolute best solution.</em></p>
-            <button class="reveal-button" onclick="revealAnswer('stop-and-think-2')">Reveal Answer</button>
+            <button class="reveal-button" onclick="revealAnswer('stop-and-think-2')">Reveal</button>
             <p id="stop-and-think-2" style="display: none;">In many real-world scenarios, settling for a local minimum can be acceptable or even desirable. For example:
             1. In time-sensitive applications, like real-time decision-making systems, finding a good enough solution quickly is often more valuable than spending extra time to find the absolute best solution.
             2. In large-scale machine learning models, the computational cost of finding the global minimum might be prohibitively expensive, and a local minimum often provides satisfactory performance.
@@ -264,7 +264,6 @@
     </section>
 
     <section id="section8">
-        <h2>Build Your Vocabulary</h2>
         <p>Let's solidify some key terms:</p>
         <div class="vocab-section">
             <h3>Build Your Vocab</h3>
@@ -278,43 +277,10 @@
         <div class="continue-button" onclick="showNextSection(9)">Continue</div>
     </section>
 
+    
     <section id="section9">
-        <h2>Test Your Knowledge</h2>
-        <p>Time for a quick quiz to check your understanding!</p>
-        <div class="test-your-knowledge">
-            <h3>Test Your Knowledge</h3>
-            <h4>Which of the following statements is TRUE about local minima in Gradient Descent?</h4>
-            <form id="quiz-form">
-                <label>
-                    <input type="radio" name="quiz" value="1">
-                    Local minima are always undesirable and indicate a failure of the algorithm.
-                </label><br>
-                <label>
-                    <input type="radio" name="quiz" value="2">
-                    Local minima can sometimes provide satisfactory solutions, even if they are not the global minimum.
-                </label><br>
-                <label>
-                    <input type="radio" name="quiz" value="3">
-                    Gradient Descent always finds the global minimum, avoiding all local minima.
-                </label><br>
-                <label>
-                    <input type="radio" name="quiz" value="4">
-                    Local minima only occur in poorly designed cost functions.
-                </label><br>
-                <button type="button" class="check-button" onclick="checkAnswer()">Check Answer</button>
-            </form>
-            <p id="quiz-result" style="display: none;"></p>
-        </div>
-        <div class="continue-button" onclick="showNextSection(10)">Continue</div>
-    </section>
-
-    <section id="section10">
-        <h2>Wrapping Up Lesson 4</h2>
         <p>Congratulations, you've now grappled with the challenges and considerations of Gradient Descent! You understand the critical role of the learning rate, the complexities of local minima, and the nature of real-world cost functions. This knowledge will be invaluable as you apply Gradient Descent to more complex problems. In the next lesson, we'll introduce a powerful variant of Gradient Descent called Stochastic Gradient Descent. Get ready to explore a faster and more dynamic approach to optimization!</p>
-        <div class="image-placeholder">
-            <img src="/placeholder.svg?height=300&width=600" alt="A hiker successfully navigating a challenging mountain path, having overcome obstacles and learned from the terrain, symbolizing the mastery gained from understanding the challenges of gradient descent.">
-        </div>
-    </section>
+            </section>
 
     <script>
         // Show the first section initially
