@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Local Minima vs. Global Minima - The Landscape Challenge</title>
+    <title>GD in Practice & Introducing Stochastic Gradient Descent (SGD)</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -104,10 +104,10 @@
             cursor: pointer;
         }
         .test-your-knowledge {
-            background-color: #e6ffe6;
+            background-color: #e6ffe6; /* Light green background */
         }
         .test-your-knowledge h3 {
-            color: #28a745;
+            color: #28a745; /* Dark green heading */
             font-size: 0.75em;
             margin-bottom: 5px;
             margin-top: 5px;
@@ -126,7 +126,7 @@
             padding: 10px 20px;
             margin-top: 15px;
             color: #ffffff;
-            background-color: #28a745;
+            background-color: #28a745; /* Green background */
             border-radius: 5px;
             text-decoration: none;
             cursor: pointer;
@@ -134,10 +134,10 @@
             font-size: 1em;
         }
         .faq-section {
-            background-color: #fffbea;
+            background-color: #fffbea; /* Light yellow background */
         }
         .faq-section h3 {
-            color: #ffcc00;
+            color: #ffcc00; /* Bright yellow heading */
             font-size: 0.75em;
             margin-bottom: 5px;
             margin-top: 5px;
@@ -148,127 +148,228 @@
             margin-top: 10px;
             margin-bottom: 8px;
         }
+        .math-explainer {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .math-step {
+            margin-bottom: 15px;
+        }
+        .math-explanation {
+            font-style: italic;
+            color: #666;
+            margin-top: 5px;
+        }
     </style>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
     <section id="section1">
-        <h1>Local Minima vs. Global Minima - The Landscape Challenge</h1>
         <div class="image-placeholder">
-            <img src="/placeholder.svg?height=300&width=600" alt="Image showing a complex mountain range landscape with multiple valleys at different depths, symbolizing a non-convex cost function with local and global minima.">
+            <img src="/placeholder.svg?height=300&width=600" alt="A complex, high-dimensional landscape representing a real-world cost function.">
         </div>
-        <p>Welcome back, explorers! 👋 In our previous lessons, we've been visualizing the cost function as a simple, bowl-shaped curve. That's a helpful starting point, but real-world cost functions can be much more complex. Think of them not just as a simple bowl, but as a vast, mountainous landscape with many valleys, some shallow and some deep. This lesson is all about understanding this 'landscape challenge' and the concepts of <strong>Local Minima</strong> and <strong>Global Minima</strong>. Let's navigate this terrain!</p>
+        <h1>Lesson 4: GD in Practice & Introducing Stochastic Gradient Descent (SGD)</h1>
+        <p>We've learned about Gradient Descent, how it works for linear regression, and the fact that it can get stuck in local minima for complex problems. So, how does this all play out in practical machine learning?</p>
         <div class="continue-button" onclick="showNextSection(2)">Continue</div>
     </section>
 
     <section id="section2">
-        <h2>Introducing Local Minima</h2>
-        <p>Imagine our hiker from Lesson 1 is now in a sprawling mountain range. Instead of just one lowest point, there might be multiple valleys at different altitudes.</p>
+        <h2>GD: Strengths and Realities</h2>
+        <p>Let's recap some key characteristics of using Gradient Descent:</p>
+        <ul>
+            <li><strong>1. Workhorse of ML:</strong> Gradient Descent (and its variants) are <em>fundamental</em> optimization tools. They power the training of countless machine learning models, from simple regressions to massive deep neural networks.</li>
+            <li><strong>2. Local Minima are Common:</strong> For the complex, high-dimensional, non-convex cost functions found in many modern ML tasks (like training deep nets), GD <em>will</em> typically converge to a local minimum, not necessarily the global one.</li>
+            <li><strong>3. No Guarantees, But Often Good Enough:</strong> While it doesn't guarantee the absolute best solution, the local minima found are often surprisingly effective. Models trained this way frequently achieve high performance.</li>
+            <li><strong>4. Good Generalization:</strong> Interestingly, models trained with GD often generalize well to new data, even if they settled in a local minimum. Overly optimizing to find the absolute sharpest global minimum on the <em>training</em> data might sometimes even hurt performance on <em>unseen</em> data (overfitting).</li>
+        </ul>
         <div class="image-placeholder">
-            <img src="/placeholder.svg?height=300&width=600" alt="Image of a mountain range with multiple valleys, with one valley clearly marked as the 'Global Minimum' at the lowest altitude.">
+            <img src="/placeholder.svg?height=300&width=600" alt="Visual Aid: 3D cost surface showing complex landscape with many local minima, with text overlays: 'Complex Landscape', 'Many Local Minima', 'GD finds one valley', 'Often leads to good models!'">
         </div>
-        <p>In this complex landscape, a <strong>Global Minimum</strong> is like the absolute lowest point in the <em>entire</em> mountain range – the deepest valley overall. This is the ideal solution we'd ideally want to find, where our cost function is minimized as much as possible.</p>
-        <p>However, there can also be <strong>Local Minima</strong>. These are like valleys that are lower than their <em>immediate</em> surroundings, but they are not the lowest point in the <em>entire</em> mountain range. They are 'local' bottoms, but not the 'global' bottom.</p>
-        <div class="image-placeholder">
-            <img src="/placeholder.svg?height=300&width=600" alt="Image depicting a hiker reaching the bottom of a valley, but a signpost nearby indicates 'Local Minimum', while a distant, deeper valley is labeled 'Global Minimum', illustrating getting stuck in a local minimum.">
-        </div>
-        <p>Think of Gradient Descent as a hiker who always walks downhill. If the hiker starts in a particular valley, they will naturally descend to the bottom of <em>that</em> valley. But, if that valley is just a <strong>Local Minimum</strong>, they might get stuck there, even if there's a much deeper valley – the <strong>Global Minimum</strong> – somewhere else in the mountain range.</p>
-        <p>In terms of our cost function, this means that Gradient Descent might converge to a set of parameters that give a reasonably low cost (a local minimum), but not the <em>absolute lowest possible cost</em> (the global minimum).</p>
-        <div class="interactive-placeholder">
-            <img src="/placeholder.svg?height=300&width=600" alt="Interactive 3D surface plot of a non-convex cost function landscape with multiple valleys. Mark a Global Minimum (deepest valley) and several Local Minima (shallower valleys). Allow users to click on different starting points on the landscape. For each starting point, trace a Gradient Descent path that descends into a valley, showing how starting points near local minima lead to those local minima, while other starting points might lead to the global minimum or different local minima.">
-        </div>
-        <div class="vocab-section">
-            <h3>Build Your Vocab</h3>
-            <h4 class="vocab-term">Global Minimum</h4>
-            <p>The absolute lowest value of the cost function over the entire parameter space. Represents the best possible solution.</p>
-        </div>
-        <p>Reaching the Global Minimum is our ultimate goal, but Local Minima can pose a challenge!</p>
         <div class="continue-button" onclick="showNextSection(3)">Continue</div>
     </section>
 
     <section id="section3">
-        <h2>The Challenge for Gradient Descent</h2>
-        <p>The problem is that Gradient Descent is designed to find <em>a</em> minimum, not necessarily the <em>global</em> minimum, especially in these complex landscapes.</p>
-        <div class="image-placeholder">
-            <img src="/placeholder.svg?height=300&width=600" alt="Image of a convex (bowl-shaped) cost function curve, with arrows showing Gradient Descent paths from different starting points all converging to the single global minimum at the bottom.">
-        </div>
-        <p>If our cost function landscape is <strong>convex</strong> (like a perfect bowl), there's only one valley – the Global Minimum – and any downhill path will lead to it. In this ideal case, Gradient Descent works beautifully and is guaranteed to find the global minimum (if it converges).</p>
-        <p>However, many real-world Machine Learning cost functions, especially in complex models like <strong>neural networks</strong>, are <strong>non-convex</strong>. They are like our mountain range – full of hills, valleys, and multiple local minima.</p>
-        <div class="image-placeholder">
-            <img src="/placeholder.svg?height=300&width=600" alt="Image depicting a non-convex cost function landscape with multiple valleys. Show two hikers starting at different points: one hiker descending into a shallow local minimum, and another hiker descending into a deeper global minimum, illustrating the starting point dependency.">
-        </div>
-        <p>In non-convex landscapes, where Gradient Descent starts its 'hike' (i.e., the initial parameters $$\beta_{start}$$) can significantly influence which minimum it ends up finding. Starting in different locations can lead to different valleys – some local, some potentially global.</p>
-        <p>This means that Gradient Descent is not guaranteed to find the <em>best</em> possible solution (the global minimum) every time. It might get 'stuck' in a suboptimal <strong>Local Minimum</strong>.</p>
-        <div class="vocab-section">
-            <h3>Build Your Vocab</h3>
-            <h4 class="vocab-term">Local Minimum</h4>
-            <p>A point in the parameter space where the cost function is lower than in its immediate neighborhood, but not necessarily the lowest value overall. Gradient Descent can get stuck in local minima.</p>
-        </div>
-        <p>The risk of getting stuck in Local Minima is a key challenge when using Gradient Descent.</p>
+        <p>So, while the local minimum issue is real, it doesn't stop Gradient Descent from being incredibly useful and effective in practice.</p>
         <div class="continue-button" onclick="showNextSection(4)">Continue</div>
     </section>
 
     <section id="section4">
-        <h2>Visualizing the Landscape</h2>
-        <p>To really understand Local and Global Minima, it's helpful to visualize different cost function landscapes.</p>
-        <div class="interactive-placeholder">
-            <img src="/placeholder.svg?height=300&width=600" alt="Interactive 2D contour plot of various cost functions. Dropdown menu to select different function shapes: (1) Convex (single minimum), (2) Non-convex (multiple local minima, one global minimum), (3) Saddle point landscape. For each selected landscape, allow users to click to set a starting point and visualize the Gradient Descent path. Observe how paths behave differently in convex vs. non-convex landscapes and around saddle points.">
-        </div>
-        <p>Experiment with different starting points and landscape shapes. Can you always reach the global minimum in the non-convex landscape? What happens near saddle points?</p>
+        <h2>The Speed Problem: Batch GD Bottleneck</h2>
+        <p>Remember <strong>Batch Gradient Descent</strong> from Lesson 2? To calculate the gradient for even <em>one</em> update step, we had to process our <strong>entire</strong> training dataset:</p>
         <div class="continue-button" onclick="showNextSection(5)">Continue</div>
     </section>
 
     <section id="section5">
-        <h2>Does It Always Matter?</h2>
-        <p>Is getting stuck in a Local Minimum always a disaster? Not necessarily!</p>
-        <div class="stop-and-think">
-            <h3>Stop and Think</h3>
-            <h4>Think about real-world problems. Is 'good enough' sometimes actually good enough? In Machine Learning, is finding a Global Minimum always essential, or can Local Minima sometimes be acceptable?</h4>
-            <button class="reveal-button" onclick="revealAnswer('stop-and-think-1')">Reveal</button>
-            <p id="stop-and-think-1" style="display: none;">In many practical Machine Learning scenarios, finding a very good Local Minimum can be perfectly acceptable. The performance difference between a good local minimum and the true Global Minimum might be negligible in practice. Also, in highly complex, high-dimensional spaces, the concept of a single, perfect 'Global Minimum' becomes less crucial, and finding 'good enough' solutions that generalize well is often the primary focus.</p>
+                <p>\[ \frac{\partial C}{\partial \beta_j} = \frac{1}{n} \sum_{i=1}^{n} (f_{\beta}(x^{(i)}) - y^{(i)}) x_j^{(i)} \]</p>
+                <p class="math-explanation">That big Sigma symbol \(\sum_{i=1}^{n}\) means summing over all \(n\) data points.</p>
+
+        <div class="image-placeholder">
+            <img src="/placeholder.svg?height=200&width=400" alt="Icon: A loading spinner or progress bar moving very slowly next to a large database symbol.">
         </div>
+        <p>Imagine \(n\) is millions or even billions (common in web-scale datasets). Calculating this sum for every single step becomes extremely slow! Each iteration takes a long time, even if the total number of iterations needed to converge isn't huge.</p>
+        <p>We need a faster way to estimate the gradient direction.</p>
         <div class="continue-button" onclick="showNextSection(6)">Continue</div>
     </section>
 
     <section id="section6">
-        <h2>Frequently Asked Questions</h2>
-        <div class="faq-section">
-            <h3>Frequently Asked Questions</h3>
-            <h4>Are there ways to avoid getting stuck in Local Minima?</h4>
-            <p>Yes, there are techniques! More advanced optimization algorithms, variations of Gradient Descent (like Momentum, Adam), and clever initialization strategies can help reduce the chances of getting trapped in shallow local minima. Stochastic Gradient Descent (which we'll learn about soon!) itself has some properties that can help escape local minima due to its noisy updates.</p>
+        <h2>Introducing Randomness: Stochastic Gradient Descent (SGD)</h2>
+        <p>This need for speed leads us to a popular and powerful variant: <strong>Stochastic Gradient Descent (SGD)</strong>.</p>
+        <div class="image-placeholder">
+            <img src="/placeholder.svg?height=300&width=600" alt="Visual Aid: Blackboard image showing 'Where the stochastic comes from in SGD'">
         </div>
         <div class="continue-button" onclick="showNextSection(7)">Continue</div>
     </section>
 
     <section id="section7">
-        <h2>Test Your Knowledge</h2>
-        <div class="test-your-knowledge">
-            <h3>Test Your Knowledge</h3>
-            <h4>In a non-convex cost function landscape, Gradient Descent is:</h4>
-            <form id="quiz-form">
-                <label>
-                    <input type="radio" name="quiz" value="0"> Guaranteed to find the Global Minimum.
-                </label><br>
-                <label>
-                    <input type="radio" name="quiz" value="1"> Guaranteed to find a Local Minimum, but not necessarily the Global Minimum.
-                </label><br>
-                <label>
-                    <input type="radio" name="quiz" value="2"> Guaranteed to find the Maximum.
-                </label><br>
-                <label>
-                    <input type="radio" name="quiz" value="3"> Not guaranteed to find any minimum.
-                </label><br>
-            </form>
-            <button class="check-button" onclick="checkAnswer()">Check Answer</button>
-            <p id="quiz-result" style="display: none;"></p>
-        </div>
+        <p>What does 'stochastic' mean here? It essentially means involving randomness or probability.</p>
+        <p>Instead of calculating the <em>exact</em> gradient using all \(n\) data points (which is slow), SGD takes a radical approach: <strong>it estimates the gradient using just <em>one</em> randomly chosen data point at each step!</strong></p>
         <div class="continue-button" onclick="showNextSection(8)">Continue</div>
     </section>
 
     <section id="section8">
-        <h2>Moving Forward</h2>
-        <p>Excellent work navigating the landscape challenge! ⛰️ Understanding Local and Global Minima is crucial for appreciating both the power and limitations of Gradient Descent. It sets the stage for exploring more advanced optimization techniques that try to address the local minima issue. In our next lesson, we'll take a step back and summarize the overall characteristics – strengths and weaknesses – of Gradient Descent. Keep exploring!</p>
+                <p><strong>Batch GD Gradient (simplified for one parameter β)</strong></p>
+                <p>\[ \nabla C = \frac{1}{n} \sum_{i=1}^{n} \nabla C_i(\beta) \]</p>
+                <p class="math-explanation">Average gradient contribution from all points.</p>
+        <div class="continue-button" onclick="showNextSection(9)">Continue</div>
+    </section>
+
+    <section id="section9">
+                <p><strong>SGD Gradient Estimate (simplified)</strong></p>
+                <p>\[ \nabla C \approx \nabla C_k(\beta) \]</p>
+                <p class="math-explanation">Approximate the gradient using only the gradient contribution from <em>one</em> randomly chosen point \(k\).</p>
+        <div class="continue-button" onclick="showNextSection(10)">Continue</div>
+    </section>
+
+    <section id="section10">
+        <p>Think about it: calculating the gradient contribution for one point (\(\nabla C_k(\beta)\)) is <em>much</em> faster than summing up contributions from millions of points.</p>
+        <div class="continue-button" onclick="showNextSection(11)">Continue</div>
+    </section>
+
+    <section id="section11">
+        <div class="vocab-section">
+            <h3>Build Your Vocab</h3>
+            <h4 class="vocab-term">Stochastic Gradient Descent (SGD)</h4>
+            <p>A variation of Gradient Descent where the gradient is estimated using only a single, randomly selected training example in each iteration.</p>
+            <h4 class="vocab-term">Stochastic</h4>
+            <p>Involving randomness or probability. In SGD, the randomness comes from selecting one data point at a time.</p>
+        </div>
+        <div class="continue-button" onclick="showNextSection(12)">Continue</div>
+    </section>
+
+    <section id="section12">
+        <h2>SGD: The Trade-off - Speed vs. Noise</h2>
+        <p>So, SGD iterations are incredibly fast compared to Batch GD. But what's the catch?</p>
+        <p>The gradient calculated from a single data point (\(\nabla C_k(\beta)\)) is a <strong>noisy estimate</strong> of the true gradient (\(\nabla C\)). It points in <em>roughly</em> the right direction, but not exactly.</p>
+        <p>This means the path SGD takes towards the minimum is much more erratic – it zig-zags!</p>
+        <div class="image-placeholder">
+            <img src="/placeholder.svg?height=300&width=600" alt="Visual Aid: A 2D contour plot (cost landscape) showing two paths from the same starting point towards the minimum. Path 1 (Batch GD): Smooth, direct line. Path 2 (SGD): Noisy, zig-zagging line that generally trends towards the minimum but jumps around a lot.">
+        </div>
+        <p>This noise has pros and cons:</p>
+        <ul>
+            <li><strong>Pro:</strong> Can potentially help escape shallow local minima (the randomness might 'kick' it out).</li>
+            <li><strong>Pro:</strong> Much faster progress per iteration, especially on large datasets.</li>
+            <li><strong>Con:</strong> Convergence to the exact minimum can be slower and might oscillate around it instead of settling perfectly.</li>
+            <li><strong>Con:</strong> Requires careful tuning of the learning rate (often needs to decrease over time).</li>
+        </ul>
+        <div class="continue-button" onclick="showNextSection(13)">Continue</div>
+    </section>
+
+    <section id="section13">
+        <h2>The Middle Ground: Mini-Batch Gradient Descent</h2>
+        <p>Often, the best of both worlds comes from <strong>Mini-Batch Gradient Descent</strong>.</p>
+        <p>Instead of using all \(n\) samples (Batch) or just 1 sample (SGD), Mini-Batch GD uses a small, random subset of the data (a 'mini-batch') in each step. Typical mini-batch sizes (\(b\)) are powers of 2, like 32, 64, 128, 256.</p>
+
+                <p><strong>Mini-Batch GD Gradient Estimate</strong></p>
+                <p>\[ \nabla C \approx \frac{1}{b} \sum_{k \in \text{batch}} \nabla C_k(\beta) \]</p>
+                <p class="math-explanation">Average gradient contribution from a small batch of \(b\) randomly chosen points.</p>
+   
+        <div class="image-placeholder">
+            <img src="/placeholder.svg?height=300&width=600" alt="Visual Aid: A 2D contour plot showing three paths: Batch GD (smooth), SGD (very noisy), and Mini-Batch GD (moderately noisy), representing a balance between the two approaches.">
+        </div>
+        <div class="continue-button" onclick="showNextSection(14)">Continue</div>
+    </section>
+
+    <section id="section14">
+        <p>Mini-Batch GD offers a great compromise:</p>
+        <ul>
+            <li>Faster iterations than Batch GD.</li>
+            <li>Less noisy updates than SGD, leading to more stable convergence.</li>
+            <li>Takes advantage of hardware optimizations for matrix operations (processing 64 examples at once is often much more efficient than processing 1 example 64 times).</li>
+        </ul>
+        <p><strong>In practice, Mini-Batch Gradient Descent is the most commonly used variant for training large machine learning models, especially deep neural networks.</strong></p>
+        <div class="continue-button" onclick="showNextSection(15)">Continue</div>
+    </section>
+
+    <section id="section15">
+        <div class="vocab-section">
+            <h3>Build Your Vocab</h3>
+            <h4 class="vocab-term">Mini-Batch Gradient Descent</h4>
+            <p>A variation of Gradient Descent where the gradient is estimated using a small, randomly selected subset (a 'mini-batch') of the training data in each iteration.</p>
+            <h4 class="vocab-term">Batch Size (n, b, or 1)</h4>
+            <p>The number of training examples used in one iteration to estimate the gradient. Batch GD uses \(n\) (all). SGD uses 1. Mini-Batch GD uses \(b\) (e.g., 32, 64, ...).</p>
+        </div>
+        <div class="continue-button" onclick="showNextSection(16)">Continue</div>
+    </section>
+
+    <section id="section16">
+        <h2>Exploring GD Variants with Tools</h2>
+        <p>Understanding the differences between Batch, Mini-Batch, and Stochastic GD is easier when you can see them in action. Online tools provide fantastic interactive visualizations.</p>
+        <div class="image-placeholder">
+            <img src="/placeholder.svg?height=300&width=600" alt="Visual Aid: Screenshot of an online tool highlighting the 'Select a batch size' options (m=m, m=24, m=1) and the 'Cost vs. Iteration' plot.">
+        </div>
+        <p>Using such tools (like the one linked in the course materials), you can experiment with:</p>
+        <ul>
+            <li><strong>Dataset Size:</strong> How the amount of data affects things.</li>
+            <li><strong>Initialization:</strong> Where the optimization starts.</li>
+            <li><strong>Learning Rate:</strong> How step size impacts convergence.</li>
+            <li><strong>Batch Size:</strong> Directly comparing Batch, Mini-Batch, and SGD.</li>
+            <li><strong>Visualization:</strong> Seeing the path on the cost landscape and how cost decreases over iterations.</li>
+        </ul>
+        <div class="interactive-placeholder">
+            <img src="/placeholder.svg?height=300&width=600" alt="Interactive Element: Link/Embed to an optimization tool where students can try generating data, setting a learning rate, and running the 'Train' process using different batch sizes.">
+        </div>
+        <p>Experimenting with these tools helps build intuition about how these algorithms behave and how hyperparameters interact.</p>
+        <div class="continue-button" onclick="showNextSection(17)">Continue</div>
+    </section>
+
+    <section id="section17">
+        <div class="faq-section">
+            <h3>Frequently Asked Questions</h3>
+            <h4>Which batch size is best?</h4>
+            <p>There's no single 'best' batch size – it depends on the dataset, model, and hardware. Mini-batches (like 32-256) are often a good starting point as they balance computational efficiency and update stability. Pure SGD (batch size 1) can be useful but often requires more careful learning rate tuning. Full Batch GD is rarely used for very large datasets due to its speed.</p>
+        </div>
+        <div class="continue-button" onclick="showNextSection(18)">Continue</div>
+    </section>
+
+    <section id="section18">
+        <h2>Course Recap</h2>
+        <div class="image-placeholder">
+            <img src="/placeholder.svg?height=200&width=200" alt="Icon: A summary checklist or a graduating cap.">
+        </div>
+        <p>We've covered a lot in these lessons!</p>
+        <p>We started with the motivation for <strong>Gradient Descent</strong> as an iterative optimization method, especially for large datasets. We explored its core <strong>update rule</strong> involving the <strong>learning rate</strong> and the <strong>gradient</strong>.</p>
+        <p>We then applied it specifically to <strong>Linear Regression</strong>, deriving the <strong>MSE cost function</strong> and its <strong>partial derivatives</strong> to get the update rules for <strong>Batch Gradient Descent</strong>.</p>
+        <p>We discussed the <strong>full algorithm structure</strong>, including <strong>hyperparameters</strong> (\(\alpha\), \(N\), \(\varepsilon\)) and <strong>stopping conditions</strong>. We confronted the challenge of <strong>non-convex</strong> cost functions and the resulting <strong>local minimum problem</strong>, understanding that GD finds local optima, which are often sufficient in practice.</p>
+        <p>Finally, we addressed the speed limitations of Batch GD and introduced the faster, noisier <strong>Stochastic Gradient Descent (SGD)</strong> (using 1 sample) and the practical compromise, <strong>Mini-Batch Gradient Descent</strong> (using a small batch).</p>
+        <p>This foundational knowledge of Gradient Descent and its variants is essential for understanding how most modern machine learning models are trained.</p>
+        <div class="continue-button" onclick="showNextSection(19)">Continue</div>
+    </section>
+
+    <section id="section19">
+        <div class="stop-and-think">
+            <h3>Stop and Think</h3>
+            <h4>Can you briefly explain the main difference in how Batch GD, Mini-Batch GD, and SGD calculate the gradient in each step?</h4>
+            <button class="reveal-button" onclick="revealAnswer('stop-and-think-recap')">Reveal</button>
+            <p id="stop-and-think-recap" style="display: none;">Batch GD uses all \(n\) data points. Mini-Batch GD uses a small random subset of \(b\) points. SGD uses just 1 random point.</p>
+        </div>
+        <div class="continue-button" onclick="showNextSection(20)">Continue</div>
+    </section>
+
+    <section id="section20">
+        <p>Congratulations on completing this block on Gradient Descent!</p>
     </section>
 
     <script>
@@ -298,28 +399,6 @@
             
             revealText.style.display = "block";
             revealButton.style.display = "none";
-        }
-
-        function checkAnswer() {
-            const form = document.getElementById('quiz-form');
-            const result = document.getElementById('quiz-result');
-            const selectedAnswer = form.querySelector('input[name="quiz"]:checked');
-
-            if (selectedAnswer) {
-                const answerValue = selectedAnswer.value;
-                if (answerValue === "1") {
-                    result.textContent = "Correct! Gradient Descent is designed to descend to *a* minimum, which in a non-convex landscape, is likely to be a local minimum.";
-                    result.style.color = "green";
-                } else {
-                    result.textContent = "Incorrect. Try again!";
-                    result.style.color = "red";
-                }
-                result.style.display = "block";
-            } else {
-                result.textContent = "Please select an answer.";
-                result.style.color = "red";
-                result.style.display = "block";
-            }
         }
     </script>
 </body>
